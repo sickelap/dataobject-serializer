@@ -4,7 +4,7 @@
 
     DataObjectSerializer: # module configuration namespace
         show_model_class: false # shorten json output
-        override_precedence: merge # property, group or merge, default merge
+        override_precedence: merge # possible values: property, group or merge. Only merge is implemented at the moment
         Member: # DataObject
             groups: # configuration identifier
                 short: # group name
@@ -20,7 +20,7 @@
                     - Surname
                     - Homepage
                     - Avatar(properties:Url)
-                    - Groups(group:long) # property with serialization override to export for speciffic group
+                    - Groups(group:long) # property with serialization override to export speciffic group
                 member_email:
                     - Email
         Group:
@@ -52,7 +52,7 @@
         return $response;
     }
         
-With configuration above, this code will produce output similar to:
+With above configuration, this code will produce output similar to:
         
     {
         "ID": 1,
