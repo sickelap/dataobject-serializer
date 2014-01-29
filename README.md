@@ -38,4 +38,43 @@
             groups:
                 long:
                     - Url
-
+                    
+                    
+## Example usage:
+        public function memberToJson() {
+            $data = array();
+            if ($member = Member::currentUser()) {
+                $data = Convert::array2json($member->serialize('long','medium'));
+            }
+            $response = new SS_HTTPResponse();
+            $response->setBody($data);
+            $response->addHeader('Content-Type', 'application/json');
+            return $response;
+        }
+        
+        With configuration above, this code will produce output similar to:
+        
+        {
+            "ID": 1,
+            "FirstName": "Default",
+            "Surname": "Admin",
+            "Email": "admin@localhost.dev",
+            "Groups": [
+                {
+                    "ID": 1,
+                    "Title": "Content Authors",
+                    "Code": "content-authors"
+                },
+                {
+                    "ID": 2,
+                    "Title": "Administrators",
+                    "Code": "administrators"
+                }
+            ],
+            "Homepage": "http://admin.homepage.com",
+            "Avatar": {
+                "ID": 4,
+                "Url": "/assets/Uploads/300x180-white.png"
+            }
+        }
+        
