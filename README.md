@@ -1,4 +1,4 @@
-# (De-)Serializer for Silverstripe DataObject (and DataList)
+# Silverstripe DataObject (de-)serializer
 
 ## Example configuration (_config.yml)
 
