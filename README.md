@@ -120,5 +120,6 @@ With above configuration and code, when accessing /member it will produce output
 * property and group override precedence
 * group access control
 * fine grained property access control
-* url properties and groups query override (partial query)
+* ~~url properties and groups query override (partial query)~~
+    This is actually is job for the controller.
 
