@@ -44,10 +44,10 @@
     public function memberToJson() {
         $data = array();
         if ($member = Member::currentUser()) {
-            $data = Convert::array2json($member->serialize('long','medium'));
+            $data = $member->serialize('long','medium');
         }
         $response = new SS_HTTPResponse();
-        $response->setBody($data);
+        $response->setBody(Convert::array2json($data));
         $response->addHeader('Content-Type', 'application/json');
         return $response;
     }
