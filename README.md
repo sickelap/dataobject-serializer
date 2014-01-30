@@ -14,13 +14,13 @@
                     - FirstName
                     - Surname
                     - Email
-                    - Groups(properties:Title) # property with serialization override to export speciffic fields
+                    - Groups(properties:Title,Code) # relation component with serialization override to serialize speciffic fields only
                 long:
                     - FirstName
                     - Surname
                     - Homepage
                     - Avatar(properties:Url)
-                    - Groups(group:long) # property with serialization override to export speciffic group
+                    - Groups(group:short) # relation component with serialization override to serialize speciffic group
                 member_email:
                     - Email
         Group:
@@ -30,7 +30,7 @@
                 long:
                     - Title
                     - Code
-                group_with_members:
+                with_members_short:
                     - Title
                     - Code
                     - Members(group:short)
@@ -53,7 +53,7 @@
     }
         
 With above configuration, this code will produce output similar to:
-        
+
     {
         "ID": 1,
         "FirstName": "Default",
@@ -77,3 +77,12 @@ With above configuration, this code will produce output similar to:
             "Url": "/assets/Uploads/300x180-white.png"
         }
     }
+
+# TODO
+
+* object (reconstruction) deserializer
+* property and group override precedence
+* group access control
+* fine grained property access control
+* url properties and groups query override (partial query)
+
