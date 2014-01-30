@@ -4,14 +4,20 @@ class DataObjectSerializer extends DataExtension
 {
 
     /**
+     * @param array $groups
      * @return string
      */
-    public function serialize()
+    public function serialize($groups = array())
     {
-        $groups = func_get_args();
-        /** @var DataObject $do */
-        $do = $this->owner;
-        return $this->serializeDataObject($do, $groups);
+        if ($this->owner instanceof DataList) {
+            return $this->serializeDataList($this->owner, $groups);
+        }
+
+        if ($this->owner instanceof DataObject) {
+            return $this->serializeDataObject($this->owner, $groups);
+        }
+
+        return null;
     }
 
     private function serializeDataObject(DataObject $do, $groups = array())
@@ -43,7 +49,7 @@ class DataObjectSerializer extends DataExtension
      * @param $json
      * @return Object
      */
-    public function deserilize($json)
+    public function deserialize($json)
     {
         // TODO
         return DataObject::create();
@@ -102,10 +108,7 @@ class DataObjectSerializer extends DataExtension
              * TODO: implement override precedence for property and group. Now only merge option is implemented.
              */
 
-            /**
-             * example $groups:
-             * group:some_group|properties:property1,property2|group:...
-             */
+            // group:some_group|properties:property1,property2|group:...
             $segments = explode("|", $groups);
             foreach ($segments as $segment) {
                 if (preg_match('/^group:([\w]+)$/', $segment, $matches)) {

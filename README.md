@@ -1,6 +1,7 @@
 # Silverstripe DataObject (de-)serializer
 
-## Example configuration (_config.yml)
+
+## Example configuration (mysite/_config/config.yml)
 
     DataObjectSerializer: # module configuration namespace
         show_model_class: false # shorten json output
@@ -18,6 +19,7 @@
                 long:
                     - FirstName
                     - Surname
+                    - Email
                     - Homepage
                     - Avatar(properties:Url)
                     - Groups(group:short) # relation component with serialization override to serialize speciffic group
@@ -40,19 +42,51 @@
                     - Url
                     
                     
+
 ## Example usage:
-    public function memberToJson() {
-        $data = array();
-        if ($member = Member::currentUser()) {
-            $data = $member->serialize('long','medium');
-        }
-        $response = new SS_HTTPResponse();
-        $response->setBody(Convert::array2json($data));
-        $response->addHeader('Content-Type', 'application/json');
-        return $response;
+
+
+Suppose we have following code:
+
+  `mysite/code/MemberExtension.php`:
+
+    class MemberExtension extends DataExtension {
+        private static $db = array(
+            'Homepage' => 'Varchar'
+        );
+        private static $has_one = array(
+            'Avatar' => 'Image'
+        );
     }
-        
-With above configuration, this code will produce output similar to:
+
+  `mysite/code/_config.php`:
+
+    ...
+
+    Member::add_extension('MemberExtension');
+
+    ...
+
+  `mysite/code/Page.php`:
+
+    class Page_Controller extends ContentController {
+
+        ...
+
+        public function member() {
+            $data = array();
+            if ($member = Member::currentUser()) {
+                $data = $member->serialize(array('short','long'));
+            }
+            $response = new SS_HTTP_Response();
+            $response->setBody($data);
+            $response->addHeader('Content-Type', 'application/json');
+            return $response;
+        }
+    }
+
+
+With above configuration and code, when accessing /member it will produce output similar to:
 
     {
         "ID": 1,
@@ -78,9 +112,11 @@ With above configuration, this code will produce output similar to:
         }
     }
 
+
 # TODO
 
-* object (reconstruction) deserializer
+* deserialization
+* nested loop protection
 * property and group override precedence
 * group access control
 * fine grained property access control
